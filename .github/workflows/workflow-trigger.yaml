@@ -1,0 +1,36 @@
+name: Trigger Workflow
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git Ref
+        required: true
+        type: string
+      workflow:
+        description: "Workflow name"
+        required: true
+        type: string
+      inputs:
+        description: "Workflow inputs"
+        required: true
+        type: string
+    secrets:
+      GITHUB:
+        required: true
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    name: "Dispatch (${{ inputs.workflow }})"
+    steps:
+      - name: Dispatch workflow
+        uses: octokit/request-action@v2.x
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB }}
+        with:
+          route: POST /repos/${{ github.repository }}/actions/workflows/:workflow/dispatches
+          mediaType: |
+            format: application/vnd.github.v3+json
+          workflow: ${{ inputs.workflow }}.yaml
+          inputs: ${{ inputs.inputs }}
+          ref: ${{ github.ref }}
