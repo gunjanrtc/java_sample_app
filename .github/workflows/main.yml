@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     # On push to $default-branch
-    branches: ["main"]
+    # branches: ["main"]
 
 jobs:
   # diff:
