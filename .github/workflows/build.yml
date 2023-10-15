@@ -26,7 +26,8 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0.10.2
 
   Build_and_publish_jar:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    needs: gitversion
     name: Build and Publish
     steps:
       - name: Checkout code
@@ -48,6 +49,7 @@ jobs:
           mvn package
   Building_and_publishing_image:
     runs-on: ubuntu-latest
+    needs: Build_and_publish_jar
     name: Build and publish image
     steps:
       # Login to GHCR
