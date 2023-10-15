@@ -52,6 +52,10 @@ jobs:
     needs: Build_and_publish_jar
     name: Build and publish image
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       # Login to GHCR
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
