@@ -74,9 +74,9 @@ jobs:
         env:
             GHCR_REGISTRY: ghcr.io/ritik0306/acs_java
         run: | 
-            docker build -t $GHCR_REGISTRY:latest .  
-            docker push $GHCR_REGISTRY:latest
-            echo "image=$GHCR_REGISTRY:latest" >> $GITHUB_OUTPUT 
+            docker build -t $GHCR_REGISTRY:test .  
+            docker push $GHCR_REGISTRY:test
+            echo "image=$GHCR_REGISTRY:test" >> $GITHUB_OUTPUT 
       - name: Download task definition
         run: |
           aws ecs describe-task-definition --task-definition Java-Poc --query taskDefinition --output json > task-definition.json
