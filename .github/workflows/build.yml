@@ -94,5 +94,5 @@ jobs:
         with:
             task-definition: ${{ steps.task-def.outputs.task-definition }}
             service: Java-Poc-3
-            cluster: test-default"
+            cluster: "test-default"
             wait-for-service-stability: true 
