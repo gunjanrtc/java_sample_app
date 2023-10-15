@@ -17,5 +17,4 @@ public class DemoApplication {
   public String hello() {
     return "<center>Hello world this Ritik </center>";
   }
-
 }

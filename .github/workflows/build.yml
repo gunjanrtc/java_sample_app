@@ -46,6 +46,7 @@ jobs:
           maven-version: 3.6.3
       - name: Build War
         run: |
+          mvn install
           mvn package
   Building_and_publishing_image:
     runs-on: ubuntu-latest
