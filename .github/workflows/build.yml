@@ -68,7 +68,7 @@ jobs:
       - name: Build and tag Docker imaage
         id: build-image
         env:
-            GHCR_REGISTRY: ghcr.io/ritik0306/java_repo
+            GHCR_REGISTRY: ghcr.io/ritik0306/acs_java
         run: | 
             docker build -t $GHCR_REGISTRY:latest .  
             docker push $GHCR_REGISTRY:latest
