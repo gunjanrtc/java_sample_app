@@ -9,7 +9,7 @@ jobs:
     name: GitVersion
     runs-on: ubuntu-latest
     outputs:
-      docker_tag: v${{ steps.gitversion.outputs.MajorMinorPatch }}-${{ steps.gitversion.outputs.ShortSha }}
+      docker_tag: ${{ steps.gitversion.outputs.MajorMinorPatch }}-${{ steps.gitversion.outputs.ShortSha }}
     steps:
     -
       id: checkout
