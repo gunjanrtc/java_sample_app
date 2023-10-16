@@ -75,7 +75,7 @@ jobs:
             echo "image=$GHCR_REGISTRY:test" >> $GITHUB_OUTPUT 
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition Java-Poc --query taskDefinition --output json > task-definition.json
+          aws ecs describe-task-definition --task-definition acs_poc --query taskDefinition --output json > task-definition.json
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
