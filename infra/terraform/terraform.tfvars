@@ -13,7 +13,3 @@ ecs_task_definition_family = "acs_poc"
 ecs_network_mode           = "awsvpc"
 cpu                        = 1024
 memory                     = 3072
-
-
-
-

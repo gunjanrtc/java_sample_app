@@ -33,7 +33,7 @@ jobs:
     needs: [diff]
     name: "Terraform apply"
     if: ${{needs.diff.outputs.terraform == 'changed' }}
-    uses: Ritik0306/my-first-tf-repo/.github/workflows/workflow-trigger.yaml@main
+    uses: Ritik0306/acs_java/.github/workflows/workflow-trigger.yaml@main
     with:
       workflow: terraform-apply
       ref: ${{ github.ref }}
