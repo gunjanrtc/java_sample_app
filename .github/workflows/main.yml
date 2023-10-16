@@ -9,7 +9,6 @@ jobs:
     outputs:
       terraform: ${{ steps.changes.outputs.terraform }}
       Java: ${{ steps.changes.outputs.Java }}
-
     steps:
     -
       id: checkout
