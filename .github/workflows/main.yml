@@ -24,7 +24,7 @@ jobs:
     needs: [diff]
     name: "update-sectes"
     if: ${{needs.diff.outputs.JAVA == 'changed' }}
-    uses: Ritik0306/acs_java/.github/workflows/build.yml@java
+    uses: Ritik0306/acs_java/.github/workflows/build.yml@main
     secrets:
       GITHUB: ${{ secrets.GITHUB }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
