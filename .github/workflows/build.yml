@@ -2,7 +2,7 @@ name: Build
 on:
   workflow_call:
     secrets:
-        JAVA:
+        GITHUB:
           required: true
         AWS_ACCESS_KEY_ID:
           required: true
@@ -64,7 +64,7 @@ jobs:
         with:
           registry: ghcr.io
           username: Ritik0306
-          password: ${{ secrets.ACS }}
+          password: ${{ secrets.GITHUB }}
       - name: Build and tag Docker imaage
         id: build-image
         env:
