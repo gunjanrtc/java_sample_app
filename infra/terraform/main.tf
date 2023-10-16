@@ -10,7 +10,6 @@ data "aws_iam_role" "example" {
 data "aws_secretsmanager_secret" "by-name" {
   name = "acs_infra"
 }
-
 locals {
   container_definitions_file = "./TaskDefinition/service.json"
   container_definitions      = file(local.container_definitions_file)

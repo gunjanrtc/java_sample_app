@@ -20,7 +20,7 @@ on:
 jobs:
   terraform:
     name: "Terraform"
-    uses: Ritik0306/my-first-tf-repo/.github/workflows/apply.yaml@main
+    uses: Ritik0306/acs_java/.github/workflows/apply.yaml@main
     with:
       ref: ${{ github.event.inputs.ref }}
       env: ${{ github.event.inputs.env }}
