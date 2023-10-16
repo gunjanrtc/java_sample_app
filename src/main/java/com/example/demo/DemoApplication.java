@@ -15,6 +15,6 @@ public class DemoApplication {
 
   @RequestMapping(value = "/")
   public String hello() {
-    return "<center>Hello world this Ritik </center>";
+    return "<center>Hello world this is Ritik </center>";
   }
 }
