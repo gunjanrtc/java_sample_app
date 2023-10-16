@@ -15,13 +15,6 @@ locals {
   container_definitions      = file(local.container_definitions_file)
   updated_container_definitions = replace(local.container_definitions, "var.secret_arn", "${data.aws_secretsmanager_secret.by-name.arn}")
 }
-
-# Update the secret ARN in the local container_definitions
-# locals {
-#   updated_container_definitions = replace(local.container_definitions, "var.secret_arn", "${data.aws_secretsmanager_secret.by-name.arn}")
-# }
-
-
 module "ECSService" {
   source         = "github.com/Ritik0306/my-first-tf-repo//infra/terraform/Modules/ecs_service"
   vpssubnet      = var.vpssubnet

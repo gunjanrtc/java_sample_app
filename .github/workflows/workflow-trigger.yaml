@@ -25,7 +25,7 @@ on:
 
 jobs:
   dispatch:
-    runs-on: ${{ fromJson(inputs.runner_tags) }}
+    runs-on: ubuntu-latest
     name: ubuntu-latest
     steps:
       -
