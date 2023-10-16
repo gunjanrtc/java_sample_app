@@ -6,31 +6,7 @@ variable "vpssubnet" {
   type    = list(string)
   default = ["1", "2", "3", "4", "5", "6"]
 }
-variable "username" {
-  type    = string
-  default = ""
-}
-variable "password" {
-  type    = string
-  default = ""
-}
-variable "policyarn" {
-  type    = string
-  default = ""
-}
-variable "taskrole" {
-  type    = string
-  default = ""
-}
-variable "policy" {
-  type    = string
-  default = ""
-}
-variable "kms-alias" {
-  type    = string
-  default = ""
-}
-variable "secrets-name" {
+variable "iam_role_arn" {
   type    = string
   default = ""
 }
@@ -41,10 +17,11 @@ variable "vpcid" {
 variable "security-group" {
   type = list(string)
 }
-variable "cluster" {
+variable "cluster_id" {
+  type = string
   default = ""
 }
-variable "target" {
+variable "target_group_arn" {
   type    = string
   default = ""
 }
@@ -76,6 +53,10 @@ variable "container_port" {
   type = string
 }
 variable "secret_arn" {
+  type = string
+  default = ""
+}
+variable "secret_manarger_arn" {
   type = string
   default = ""
 }

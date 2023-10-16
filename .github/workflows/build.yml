@@ -89,6 +89,6 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
             task-definition: ${{ steps.task-def.outputs.task-definition }}
-            service: Java-Poc-3
-            cluster: "test-default"
+            service: acs_poc_qa
+            cluster: "test_qa"
             wait-for-service-stability: true 

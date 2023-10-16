@@ -1,14 +1,14 @@
 data "aws_ecs_cluster" "acs_cluster" {
-  cluster_name = "test-default"
+  cluster_name = "test_qa"
 }
 data "aws_lb_target_group" "test" {
-  name = "tomcat-default"
+  name = "acstargetgroupqa"
 }
 data "aws_iam_role" "example" {
-  name = "ecsTaskExecutionrole-default"
+  name = "kms_role"
 }
 data "aws_secretsmanager_secret" "by-name" {
-  name = "infra_repo6-default"
+  name = "acs_infra"
 }
 
 locals {
@@ -24,10 +24,10 @@ locals {
 
 
 module "ECSService" {
-  source         = "github.com/Ritik0306/my-first-tf-repo//infra/terraform/Modules/ECSService"
+  source         = "github.com/Ritik0306/my-first-tf-repo//infra/terraform/Modules/ecs_service"
   vpssubnet      = var.vpssubnet
   security-group = var.security-group
-  task_arn       = module.TaskDefiniton.task_arn
+  task_arn       = module.task_definition.task_arn
   cluster_id     = data.aws_ecs_cluster.acs_cluster.id
   alb_target_arn = data.aws_lb_target_group.test.arn
   service_name   = "${var.service_name}_${terraform.workspace}"
@@ -36,7 +36,7 @@ module "ECSService" {
   container_name = var.container_name
   container_port = var.container_port
 }
-module "TaskDefiniton" {
+module "task_definition" {
   source                     = "github.com/Ritik0306/my-first-tf-repo//infra/terraform/Modules/TaskDefinition"
   iam_role_arn               = data.aws_iam_role.example.arn
   ecs_task_definition_family = var.ecs_task_definition_family
