@@ -19,9 +19,9 @@ jobs:
         echo terraform=$(git diff --quiet HEAD ${{ github.event.before }} -- infra/terraform/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
         echo Java=$(git diff --quiet HEAD ${{ github.event.before }} -- src/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
   
-  Update-secrets:
+  Build:
     needs: [diff]
-    name: "update-sectes"
+    name: "Build"
     if: ${{needs.diff.outputs.JAVA == 'changed' }}
     uses: Ritik0306/acs_java/.github/workflows/build.yml@main
     secrets:
