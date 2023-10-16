@@ -1,7 +1,7 @@
 [
   {
     "name": "ghcr",
-    "image": "ghcr.io/ritik0306/acs_java:latest",
+    "image": "ghcr.io/ritik0306/acs_java:test",
     "cpu": 0,
     "essential": true,
     "repositoryCredentials": {

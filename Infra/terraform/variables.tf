@@ -75,3 +75,7 @@ variable "container_name" {
 variable "container_port" {
   type = string
 }
+variable "secret_arn" {
+  type = string
+  default = ""
+}

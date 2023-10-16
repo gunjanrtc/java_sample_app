@@ -8,8 +8,19 @@ data "aws_iam_role" "example" {
   name = "ecsTaskExecutionrole-default"
 }
 data "aws_secretsmanager_secret" "by-name" {
-  name = "infra_repo2-default"
+  name = "infra_repo6-default"
 }
+
+locals {
+  container_definitions_file = "./TaskDefinition/service.json"
+  container_definitions      = file(local.container_definitions_file)
+  updated_container_definitions = replace(local.container_definitions, "var.secret_arn", "${data.aws_secretsmanager_secret.by-name.arn}")
+}
+
+# Update the secret ARN in the local container_definitions
+# locals {
+#   updated_container_definitions = replace(local.container_definitions, "var.secret_arn", "${data.aws_secretsmanager_secret.by-name.arn}")
+# }
 
 
 module "ECSService" {
@@ -26,11 +37,11 @@ module "ECSService" {
   container_port = var.container_port
 }
 module "TaskDefiniton" {
-  source                     = "./Modules/TaskDefinition/"
+  source                     = "github.com/Ritik0306/my-first-tf-repo//infra/terraform/Modules/TaskDefinition"
   iam_role_arn               = data.aws_iam_role.example.arn
-  secret_arn                 = data.aws_secretsmanager_secret.by-name.arn
   ecs_task_definition_family = var.ecs_task_definition_family
   ecs_network_mode           = var.ecs_network_mode
   cpu                        = var.cpu
   memory                     = var.memory
+  container_definitions      = local.updated_container_definitions
 }
