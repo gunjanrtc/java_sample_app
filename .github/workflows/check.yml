@@ -4,16 +4,24 @@ on:
     branches: ["main"]
 
 jobs:
-  # diff:
-  #   name: "Diff"
-  #   uses: Ritik0306/my-first-tf-repo/.github/workflows/diff.yml@main
-  #   with:
-  #     config: diff-config.yaml
-  #   secrets:
-  #     GITHUB: ${{ secrets.GITHUB }}
+  diff:
+    runs-on: ubuntu-20.04
+    outputs:
+      terraform: ${{ steps.changes.outputs.terraform }}
+      Java: ${{ steps.changes.outputs.Java }}
+
+    steps:
+    -
+      id: checkout
+      uses: actions/checkout@v1
+    -
+      id: changes
+      run: |
+        echo terraform=$(git diff --quiet HEAD ${{ github.event.pull_request.base.sha }} -- infra/terraform/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
+        echo Java=$(git diff --quiet HEAD ${{ github.event.pull_request.base.sha }} -- src/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
 
   terraform:
-    # needs: [diff]
+    needs: [diff]
     name: "Terraform"
     # if: ${{ fromJson(needs.diff.outputs.tags).terraform.changed }}
     uses: aravind15b/infra_repo1/.github/workflows/terraform-check.yml@main

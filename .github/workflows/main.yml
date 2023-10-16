@@ -1,28 +1,45 @@
-# name: Build
-# on:
-#   push:
-#     # On push to $default-branch
-#     # branches: ["main"]
+name: main
+on:
+  push:
+    branches: ["main"]
 
-# jobs:
-#   # diff:
-#   #   name: "Diff"
-#   #   uses: achieve-3000/github-actions/.github/workflows/diff.yaml@v2
-#   #   with:
-#   #     config: diff-config.yaml
-#   #   secrets:
-#   #     CI_PAT: ${{ secrets.CI_PAT }}
+jobs:
+  diff:
+    runs-on: ubuntu-20.04
+    outputs:
+      terraform: ${{ steps.changes.outputs.terraform }}
+      Java: ${{ steps.changes.outputs.Java }}
 
-#   terraform-apply:
-#     # needs: [diff]
-#     name: "Terraform apply"
-#     # if: ${{ fromJson(needs.diff.outputs.tags).terraform.changed }}
-#     uses: aravind15b/infra_repo1/.github/workflows/workflow-trigger.yaml@main
-#     with:
-#       workflow: terraform-apply
-#       ref: ${{ github.ref }}
-#       inputs: |
-#         env: ${{ github.event.inputs.env }}
-#         ref: ${{ github.sha }}
-#     secrets:
-#       GITHUB: ${{ secrets.GITHUB }}
+    steps:
+    -
+      id: checkout
+      uses: actions/checkout@v1
+    -
+      id: changes
+      run: |
+        echo terraform=$(git diff --quiet HEAD ${{ github.event.before }} -- infra/terraform/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
+        echo Java=$(git diff --quiet HEAD ${{ github.event.before }} -- src/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
+  
+  Update-secrets:
+    needs: [diff]
+    name: "update-sectes"
+    if: ${{needs.diff.outputs.JAVA == 'changed' }}
+    uses: Ritik0306/acs_java/.github/workflows/build.yml@java
+    secrets:
+      GITHUB: ${{ secrets.GITHUB }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  terraform-apply:
+    needs: [diff]
+    name: "Terraform apply"
+    if: ${{needs.diff.outputs.terraform == 'changed' }}
+    uses: Ritik0306/my-first-tf-repo/.github/workflows/workflow-trigger.yaml@main
+    with:
+      workflow: terraform-apply
+      ref: ${{ github.ref }}
+      inputs: |
+        env: ${{ github.event.inputs.env }}
+        ref: ${{ github.sha }}
+    secrets:
+      GITHUB: ${{ secrets.GITHUB }}
