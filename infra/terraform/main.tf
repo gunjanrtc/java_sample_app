@@ -1,14 +1,14 @@
 data "aws_ecs_cluster" "acs_cluster" {
-  cluster_name = "test_qa"
+  cluster_name = var.cluster_name
 }
-data "aws_lb_target_group" "test" {
-  name = "acstargetgroupqa"
+data "aws_lb_target_group" "target_group" {
+  name = var.target_group_name
 }
-data "aws_iam_role" "example" {
-  name = "kms_role"
+data "aws_iam_role" "iam_role" {
+  name = var.iam_role_name
 }
 data "aws_secretsmanager_secret" "by-name" {
-  name = "acs_infra"
+  name = var.secret_name
 }
 locals {
   container_definitions_file = "./TaskDefinition/service.json"

@@ -60,3 +60,19 @@ variable "secret_manarger_arn" {
   type = string
   default = ""
 }
+variable "cluster_name" {
+  type = string
+  default = ""
+}
+variable "iam_role_name" {
+  type = string
+  default = ""
+}
+variable "target_group_name" {
+  type = string
+  default = ""
+}
+variable "secret_name" {
+  type = string
+  default = ""
+}

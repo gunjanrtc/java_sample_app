@@ -8,6 +8,10 @@ launch_type    = "FARGATE"
 desired_count  = "1"
 container_port = "8080"
 container_name = "ghcr"
+cluster_name = "test_qa"
+target_group_name = "acstargetgroupqa"
+iam_role_name = "kms_role"
+secret_name = "acs_infra"
 
 
 ecs_task_definition_family = "acs_poc"
