@@ -9,6 +9,7 @@ desired_count  = "1"
 container_port = "8080"
 container_name = "ghcr"
 
+
 ecs_task_definition_family = "acs_poc"
 ecs_network_mode           = "awsvpc"
 cpu                        = 1024
