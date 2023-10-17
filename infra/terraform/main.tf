@@ -21,7 +21,7 @@ module "ECSService" {
   security-group = var.security-group
   task_arn       = module.task_definition.task_arn
   cluster_id     = data.aws_ecs_cluster.acs_cluster.id
-  alb_target_arn = data.aws_lb_target_group.test.arn
+  alb_target_arn = data.aws_lb_target_group.target_group.arn
   service_name   = "${var.service_name}_${terraform.workspace}"
   desired_count  = var.desired_count
   launch_type    = var.launch_type
@@ -30,7 +30,7 @@ module "ECSService" {
 }
 module "task_definition" {
   source                     = "github.com/Ritik0306/my-first-tf-repo//infra/terraform/Modules/TaskDefinition"
-  iam_role_arn               = data.aws_iam_role.example.arn
+  iam_role_arn               = data.aws_iam_role.iam_role.arn
   ecs_task_definition_family = var.ecs_task_definition_family
   ecs_network_mode           = var.ecs_network_mode
   cpu                        = var.cpu
