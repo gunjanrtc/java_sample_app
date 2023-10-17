@@ -14,7 +14,7 @@ variable "vpcid" {
   type    = string
   default = ""
 }
-variable "security-group" {
+variable "security_group_id" {
   type = list(string)
 }
 variable "cluster_id" {

@@ -18,7 +18,7 @@ locals {
 module "ECSService" {
   source         = "github.com/Ritik0306/my-first-tf-repo//infra/terraform/Modules/ecs_service"
   vpssubnet      = var.vpssubnet
-  security-group = var.security-group
+  security_group = var.security_group_id
   task_arn       = module.task_definition.task_arn
   cluster_id     = data.aws_ecs_cluster.acs_cluster.id
   alb_target_arn = data.aws_lb_target_group.target_group.arn
