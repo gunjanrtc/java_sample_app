@@ -1,44 +1,75 @@
-name: main
+name: Salesforce Deployment
 on:
-  push:
-    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      target_org_creds:
+        description: 'Select target org credentials'
+        default: PX_INT
+        required: true
+        type: choice
+        options:
+          - PX_INT
+          - PX_SITUAT
+          - PX_EXP_Testing
+
+      check_only:
+        description: 'Is check only deployment?'
+        default: false
+        required: true
+        type: string
+
+      deploy_token:
+        description: 'Mandatory for deployment'
+        default: ''
+        required: false
+    
+      ref:
+        description: Git Ref (Default to workflow branch)
+        required: false
 
 jobs:
-  diff:
-    runs-on: ubuntu-20.04
-    outputs:
-      terraform: ${{ steps.changes.outputs.terraform }}
-      Java: ${{ steps.changes.outputs.Java }}
+  Generate_Package:
+    if: ${{ git.ref_name == 'develop' }}
+    runs-on: ubuntu-latest
     steps:
-    -
-      id: checkout
-      uses: actions/checkout@v1
-    -
-      id: changes
-      run: |
-        echo terraform=$(git diff --quiet HEAD ${{ github.event.before }} -- infra/terraform/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
-        echo Java=$(git diff --quiet HEAD ${{ github.event.before }} -- src/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
-  
-  Build:
-    needs: [diff]
-    name: "Build"
-    if: ${{needs.diff.outputs.JAVA == 'changed' }}
-    uses: Ritik0306/acs_java/.github/workflows/build.yml@main
-    secrets:
-      GITHUB: ${{ secrets.GITHUB }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-  terraform-apply:
-    needs: [diff]
-    name: "Terraform apply"
-    if: ${{needs.diff.outputs.terraform == 'changed' }}
-    uses: Ritik0306/my-first-tf-repo/.github/workflows/workflow-trigger.yaml@main
-    with:
-      workflow: terraform-apply
-      ref: ${{ github.ref }}
-      inputs: |
-        env: ${{ github.event.inputs.env }}
-        ref: ${{ github.sha }}
-    secrets:
-      GITHUB: ${{ secrets.GITHUB }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' 
+    
+      - name: Generate Package.xml
+        run: echo "this will generate package"
+    
+  Deploy_To_Salesforce:
+    needs: Generate_Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Ant
+        uses: cedx/setup-ant@v1
+        with:
+          version: 1.9.4
+
+      - name: Deploy to Salesforce
+        run: echo "this will deploy to salesforce"
+
+  Deploy_to_velocity:
+    needs: Deploy_To_Salesforce
+    if: ${{ inputs.deploy_token == 'DEPLOY_PROD##' && inputs.check_only == 'false'}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Deploy Vlocity
+        run: echo "this will deploy to velocity"
