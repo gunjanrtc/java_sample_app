@@ -1,44 +1,15 @@
 name: Build
 on:
-  workflow_call:
-    secrets:
-        GITHUB:
-          required: true
-        AWS_ACCESS_KEY_ID:
-          required: true
-        AWS_SECRET_ACCESS_KEY:
-          required: true
+  push:
+    branches: main
 
 jobs:
-  gitversion:
-    name: GitVersion
-    runs-on: ubuntu-latest
-    outputs:
-      docker_tag: ${{ steps.gitversion.outputs.MajorMinorPatch }}-${{ steps.gitversion.outputs.ShortSha }}
-    steps:
-    -
-      id: checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    -
-      id: setup
-      uses: gittools/actions/gitversion/setup@v0.10.2
-      with:
-        versionSpec: '5.10.3'
-    -
-      id: gitversion
-      uses: gittools/actions/gitversion/execute@v0.10.2
-
   Build_and_publish_jar:
     runs-on: ubuntu-latest
-    needs: gitversion
     name: Build and Publish
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
       # Set up Java for building Jar
       - name: Set up JDK 17
         uses: actions/setup-java@v1
@@ -52,43 +23,3 @@ jobs:
       - name: Build War
         run: |
           mvn package
-      # Login to GHCR
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-region: us-east-1
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Login to GH
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: Ritik0306
-          password: ${{ secrets.GITHUB }}
-      - name: Build and tag Docker imaage
-        id: build-image
-        env:
-            GHCR_REGISTRY: ghcr.io/ritik0306/acs_java
-        run: | 
-            docker build -t $GHCR_REGISTRY:test .  
-            docker push $GHCR_REGISTRY:test
-            echo "image=$GHCR_REGISTRY:test" >> $GITHUB_OUTPUT 
-      - name: Download task definition
-        run: |
-          aws ecs describe-task-definition --task-definition acs_poc --query taskDefinition --output json > task-definition.json
-
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: "ghcr"
-          image: ${{ steps.build-image.outputs.image }}
-
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-            task-definition: ${{ steps.task-def.outputs.task-definition }}
-            service: acs_poc_qa
-            cluster: "test_qa"
-            wait-for-service-stability: true 
