@@ -3,6 +3,7 @@ updates:
 
   - package-ecosystem: "github-actions" 
     directory: "/"
+    # target-branch: "feature/dependabot"
     schedule: 
       interval: "daily"
       time: "05:09"
