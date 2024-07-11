@@ -1,0 +1,7 @@
+types:
+  - feat
+  - Feat
+  - demo
+enabled: true
+titleAndCommits: true
+anyCommit: true
