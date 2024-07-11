@@ -32,8 +32,8 @@ jobs:
         run: |
           mvn package
       
-        # Upload artificat
-      - name: Upload artificat 
+        #Upload artifact
+      - name:  Upload artificat
         uses: actions/upload-artifact@v4
         with:
           name: war
