@@ -1,5 +1,6 @@
-# Runs the workflow on the below events:
-# 1. On push to the main branch.name: Build Java Project
+name: Build Java Project
+# Runs the workflow on the below events
+# 1. On push to the main branch
 on:
   push:
     branches: ["main"]
