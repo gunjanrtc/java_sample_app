@@ -12,7 +12,7 @@ jobs:
     steps:
         # Checkout code
       - name: Checkout code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4
 
       # Installing java in runner
       - name: Set up JDK 17
